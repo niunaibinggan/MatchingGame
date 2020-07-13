@@ -166,6 +166,8 @@ export default class ResultPanel extends Hilo.Container {
         this.answerContainer.children.forEach(item => {
           item.alpha = includeArr.includes(item.id.realId) ? 0.3 : 0
         })
+      } else {
+        this.answerContainer.children.map(item => item.alpha = 0)
       }
     })
 
