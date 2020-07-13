@@ -6,7 +6,7 @@ export default class ResultModel extends Hilo.Container {
   }
   model (properties) {
 
-    const readyImage = properties.isAllRight ? properties.images.rightModel : properties.images.errorModel
+    const readyImage = properties.images.rightModel
 
     new Hilo.Bitmap({
       x: 0,

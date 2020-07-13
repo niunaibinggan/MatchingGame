@@ -11,9 +11,8 @@
   import ExportScence from '~/components/game/exportScence'
   import SubmitButton from '~/components/game/submitButton'
   import Panel from '~/components/game/panel'
-  // import ResultModel from '~/components/game/resultModel'
-  // import ResetButton from '~/components/game/resetButton'
-  // import Text from '~/components/game/text'
+  import ResultModel from '~/components/game/resultModel'
+  import ResetButton from '~/components/game/resetButton'
   export default {
     data () {
       return {
@@ -27,7 +26,6 @@
         questionsSubmitCanvas: null,
         resultCanvas: null,
         setAlpha: 1,
-        answerError: [],
         setAnswer: [],
         timer: null
       }
@@ -41,7 +39,7 @@
         questions = localStorage.getItem('questionsConfig')
       }
 
-      // if (!questions) return this.$router.replace('/config')
+      if (!questions) return this.$router.replace('/config')
 
       this.questions = JSON.parse(questions)
 
@@ -70,11 +68,9 @@
       })
 
       // 插入背景
-      // this.stage.addChild(exportScence)
+      this.stage.addChild(exportScence)
       this.questionsSubmitCanvas = this.createSubmitButton()
       this.questionsPanelCanvas = this.createPanel('panel')
-      // this.resultCanvas = this.createResult()
-
     },
     methods: {
       createPanel (type = 'panel') {
@@ -88,11 +84,10 @@
           rightBg,
           questions: this.questions,
           alpha: this.setAlpha,
-          answerError: this.answerError,
           type,
           stage: this.stage,
-          answerError: this.answerError,
-          setAnswer: this.setAnswer
+          setAnswer: this.setAnswer,
+          subBtn: this.questionsSubmitCanvas
         })
 
         this.stage.addChild(panel)
@@ -118,21 +113,21 @@
         subBtn.on(Hilo.event.POINTER_START, (e) => {
           clearInterval(this.timer)
 
-          if (!this.questionsPanelCanvas.setAnswer.every(item => item)) return
+          setTimeout(() => {
+            this.setAnswer = this.questionsPanelCanvas.setAnswer
 
-          this.setAnswer = this.questionsPanelCanvas.setAnswer
+            this.timer = setInterval(() => {
+              this.questionsSubmitCanvas.visible = this.setAnswer.every(item => item)
+            }, 300)
 
-          this.answerError = this.questionsPanelCanvas.setAnswer.filter((item, index) => item.questionId !== this.rightAnser[index])
+            this.isAllRight = !this.setAnswer.filter((item, index) => (item && item.questionId) !== this.questions.right[index].id).length
 
-          this.isAllRight = !this.answerError.length
+            if (this.isAllRight) {
+              clearInterval(this.timer)
+              this.createModel(subBtn)
+            }
 
-          // 移除作答模版
-          this.stage.removeChild(this.questionsPanelCanvas)
-
-          // 创建显示模版
-          this.questionsPanelCanvas = this.createPanel('result')
-
-          this.createModel(subBtn)
+          }, 300)
         })
         this.stage.addChild(subBtn)
 
@@ -142,11 +137,10 @@
         const resultModel = new ResultModel({
           x: 0,
           y: 0,
-          images: { rightModel: this.assets.rightModel, errorModel: this.assets.errorModel },
+          images: { rightModel: this.assets.rightModel },
           width: 1920,
           height: 1080,
           rect: [0, 0, 1920, 1080],
-          isAllRight: this.isAllRight,
           visible: true,
           alpha: this.setAlpha
         })
@@ -163,14 +157,13 @@
       },
       createRestButtons () {
         // 重置按钮
-        const repeatX = this.isAllRight ? (1920 - 329) / 2 : (1920 - 329 * 2 - 300) / 2
+        const repeatX = (1920 - 329) / 2
 
         const resetButtons = new ResetButton({
           x: repeatX,
           y: (1920 - 96) / 2 + 10,
-          images: this.isAllRight ? [this.assets.resetBtn] : [this.assets.rightBtn, this.assets.resetBtn],
+          images: [this.assets.resetBtn],
           rect: [0, 0, 329, 96],
-          isOnlyReset: this.isAllRight,
           visible: true,
           alpha: this.setAlpha
         })
@@ -179,16 +172,12 @@
 
           if (this.isAllRight) return this.resetHandel()
 
-          e.eventTarget.id ? this.resetHandel() : this.seachHanel()
-
         })
         this.stage.addChild(resetButtons)
 
         return resetButtons
       },
       resetHandel () {
-        this.resultCanvas.visible = false
-
         // 移除显示结果panel
         this.stage.removeChild(this.questionsPanelCanvas)
 
@@ -196,40 +185,11 @@
 
         // 重置基础信息
         this.setAnswer = []
-        this.answerError = []
 
-        this.shuffle(this.questions.content)
+        this.shuffle(this.questions.left.concat(this.questions.useless))
 
         // 重置后创建
         this.questionsPanelCanvas = this.createPanel('panel')
-      },
-      seachHanel () {
-        this.resultCanvas.visible = true
-      },
-      createResult () {
-        const result = new Hilo.Container({
-          x: 220,
-          y: this.questions.content.length > 7 ? 520 : 440,
-          width: 1920 - 220 * 2,
-          height: 200,
-          visible: false,
-        })
-
-        new Text({
-          text: `正确答案：${this.questions.result}`,
-          fontSize: 30,
-          bold: true,
-          visible: true,
-          alpha: 1,
-          reTextWidth: 1920 - 220 * 2,
-          height: 60,
-          x: 0,
-          y: 27,
-          color: '#ff4f4f',
-          letterSpacing: 10,
-        }).addTo(result)
-        this.stage.addChild(result)
-        return result
       },
       shuffle (arr) {
         for (var i = arr.length - 1; i >= 0; i--) {

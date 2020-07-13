@@ -23,7 +23,7 @@ export default function () {
         { id: 'errorModel', src: require('~/static/answer.png') },
         { id: 'rightModel', src: require('~/static/answer.png') },
         // { id: 'rightBtn', src: require('~/static/answer_button.png') },
-        // { id: 'resetBtn', src: require('~/static/align_button.png') },
+        { id: 'resetBtn', src: require('~/static/again_button.png') },
         { id: 'leftBg', src: require('~/static/left_bg.png') },
         { id: 'rightBg', src: require('~/static/right_bg.png') },
       ]
@@ -55,7 +55,7 @@ export default function () {
       this.rightModel = this.queue.get('rightModel').content
       this.errorModel = this.queue.get("errorModel").content
       // this.rightBtn = this.queue.get("rightBtn").content
-      // this.resetBtn = this.queue.get("resetBtn").content
+      this.resetBtn = this.queue.get("resetBtn").content
       this.leftBg = this.queue.get('leftBg').content
       this.rightBg = this.queue.get("rightBg").content
 

@@ -18,6 +18,8 @@ export default class ResultPanel extends Hilo.Container {
 
     this.creatContainer()
 
+    this.submitButton(properties)
+
     this.initPanel(properties)
   }
 
@@ -40,6 +42,22 @@ export default class ResultPanel extends Hilo.Container {
 
   setAnswer = []
 
+  submitButton (properties) {
+    properties.subBtn.on(Hilo.event.POINTER_START, (e) => {
+      const that = this
+      this.setAnswer.forEach((item, index) => {
+        if (item.questionId !== this.rightQuestions[index].id) {
+          Hilo.Tween.to(
+            that.leftContainer.getChildAt(item.realId),
+            { x: that.selectPosition[item.realId].x, y: that.selectPosition[item.realId].y },
+            { duration: 300 }
+          )
+
+          this.setAnswer[index] = undefined
+        }
+      })
+    })
+  }
 
   creatContainer () {
     this.rightContainer = new Hilo.Container({
