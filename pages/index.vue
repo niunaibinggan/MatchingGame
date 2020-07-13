@@ -70,22 +70,22 @@
       })
 
       // 插入背景
-      this.stage.addChild(exportScence)
-      this.questionsSubmitCanvas = this.createSubmitButton()
+      // this.stage.addChild(exportScence)
+      // this.questionsSubmitCanvas = this.createSubmitButton()
       this.questionsPanelCanvas = this.createPanel('panel')
       // this.resultCanvas = this.createResult()
 
     },
     methods: {
       createPanel (type = 'panel') {
-        const { errorIcon, rightIcon } = this.assets
+        const { leftBg, rightBg } = this.assets
         // 插入题目 两个板块之间的距离 300 每个背景板的长度 499 106
         const panel = new Panel({
           id: 'panel',
           x: 0,
           y: 0,
-          errorIcon,
-          rightIcon,
+          leftBg,
+          rightBg,
           questions: this.questions,
           alpha: this.setAlpha,
           answerError: this.answerError,
