@@ -71,7 +71,7 @@
 
       // 插入背景
       // this.stage.addChild(exportScence)
-      // this.questionsSubmitCanvas = this.createSubmitButton()
+      this.questionsSubmitCanvas = this.createSubmitButton()
       this.questionsPanelCanvas = this.createPanel('panel')
       // this.resultCanvas = this.createResult()
 
@@ -96,11 +96,11 @@
         })
 
         this.stage.addChild(panel)
-        // if (type === 'panel') {
-        //   this.timer = setInterval(() => {
-        //     this.questionsSubmitCanvas.visible = this.questionsPanelCanvas.setAnswer.every(item => item)
-        //   }, 300)
-        // }
+        if (type === 'panel') {
+          this.timer = setInterval(() => {
+            this.questionsSubmitCanvas.visible = this.questionsPanelCanvas.setAnswer.every(item => item)
+          }, 300)
+        }
 
         return panel
       },
@@ -111,7 +111,7 @@
           y: (1080 - 96) / 2 + 430,
           images: this.assets.submitButton,
           rect: [0, 0, 329, 96],
-          visible: true,
+          visible: false,
           alpha: this.setAlpha,
         })
 
