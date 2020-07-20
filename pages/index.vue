@@ -125,6 +125,9 @@
             if (this.isAllRight) {
               clearInterval(this.timer)
               this.createModel(subBtn)
+
+              // 清除拖拽
+              this.questionsPanelCanvas.leftContainer.children.forEach(item => item.stopDrag())
             }
 
           }, 300)
