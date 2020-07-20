@@ -24,7 +24,8 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="item.text">
+                   v-model="item.text"
+                   @change="inputChange($event,'left',index)">
           </span>
           <span class="root__line"></span>
           <span class="root__content-right root__content-common">
@@ -33,7 +34,8 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="questions.right[index].text">
+                   v-model="questions.right[index].text"
+                   @change="inputChange($event,'right',index)">
           </span>
         </p>
       </div>
@@ -50,7 +52,8 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入干扰项"
-                   v-model="item.text">
+                   v-model="item.text"
+                   @change="inputChange($event,'useless',index)">
           </span>
         </p>
       </div>
@@ -205,6 +208,25 @@
         allInput[number].focus()
 
         this.current = nextNumber
+      },
+      getByte (str = '') {
+        let len = 0
+        for (var i = 0; i < str.length; i++) {
+          var c = str.charAt(i);
+          if (escape(c).length > 4) {
+            len += 2;
+          } else if (c != "\r") { len++; }
+        }
+        return len
+      },
+      inputChange (e, type, index) {
+        if (this.getByte(e.srcElement.value) >= 20) {
+          this.$message({
+            message: `最多输入20个字符`,
+            type: 'warning'
+          })
+          this.questions[type][index].text = ''
+        }
       }
     }
   }

@@ -147,10 +147,21 @@ export default class ResultPanel extends Hilo.Container {
         }).addTo(this.answerContainer)
       }
 
+      function getByte (str = '') {
+        let len = 0
+        for (var i = 0; i < str.length; i++) {
+          var c = str.charAt(i);
+          if (escape(c).length > 4) {
+            len += 2;
+          } else if (c != "\r") { len++; }
+        }
+        return len
+      }
+
       new Text({
         id: { realId: index, questionId: item.id },
         text: item.text,
-        fontSize: 50,
+        fontSize: getByte(item.text) < 10 ? 40 : 40 - Math.round(getByte(item.text) / 8) * 5,
         bold: true,
         textAlign: 'center',
         visible: true,
@@ -158,7 +169,7 @@ export default class ResultPanel extends Hilo.Container {
         reTextWidth: type === 'left' ? rect[2] - 20 : rect[2] - 80,
         height: rect[3] - 10,
         x: type === 'left' ? 0 : this.rectLeft[2] - 12,
-        y: 10,
+        y: Math.floor(getByte(item.text) / 4) ? 10 + (40 - (40 - Math.round(getByte(item.text) / 6) * 5)) / 2 : 10,
         color: '#fff',
       }).addTo(questionsItem)
 
