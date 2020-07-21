@@ -24,8 +24,7 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="item.text"
-                   @change="inputChange($event,'left',index)">
+                   v-model="item.text">
           </span>
           <span class="root__line"></span>
           <span class="root__content-right root__content-common">
@@ -34,8 +33,7 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="questions.right[index].text"
-                   @change="inputChange($event,'right',index)">
+                   v-model="questions.right[index].text">
           </span>
         </p>
       </div>
@@ -52,8 +50,7 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入干扰项"
-                   v-model="item.text"
-                   @change="inputChange($event,'useless',index)">
+                   v-model="item.text">
           </span>
         </p>
       </div>
@@ -154,6 +151,17 @@
           return
         }
 
+        const all = this.questions.useless.concat(this.questions.left, this.questions.right)
+
+        if (all.filter(item => this.getByte(item.text) >= 21).length) {
+          this.$message({
+            message: `最多输入20个字符`,
+            type: 'warning'
+          })
+          return
+        }
+
+
         if (!this.questions.title) {
           this.$message({
             message: `请填写标题！`,
@@ -222,7 +230,7 @@
       inputChange (e, type, index) {
         if (this.getByte(e.srcElement.value) >= 21) {
           this.$message({
-            message: `最多输入22个字符`,
+            message: `最多输入20个字符`,
             type: 'warning'
           })
           this.questions[type][index].text = ''
