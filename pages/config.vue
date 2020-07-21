@@ -220,9 +220,9 @@
         return len
       },
       inputChange (e, type, index) {
-        if (this.getByte(e.srcElement.value) >= 20) {
+        if (this.getByte(e.srcElement.value) >= 21) {
           this.$message({
-            message: `最多输入20个字符`,
+            message: `最多输入22个字符`,
             type: 'warning'
           })
           this.questions[type][index].text = ''
