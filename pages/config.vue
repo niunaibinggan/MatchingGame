@@ -103,7 +103,9 @@
       } catch (error) {
         questions = localStorage.getItem('questionsConfig')
       }
-      this.questions = JSON.parse(questions)
+      if (questions) {
+        this.questions = JSON.parse(questions)
+      }
     },
     methods: {
       deleteHandel (type, index) {
