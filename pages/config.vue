@@ -183,6 +183,14 @@
           return
         }
 
+        if (this.getByte(this.questions.title) >= 18) {
+          this.$message({
+            message: `最多输入18个字符`,
+            type: 'warning'
+          })
+          return
+        }
+
         const leftEqualArr = this.questions.left.concat(this.questions.useless).map(item => item.text.replace(/\s+/g, ""))
         const leftFilter = Array.from(new Set(leftEqualArr))
 
