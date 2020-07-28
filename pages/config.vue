@@ -93,7 +93,17 @@
           title: ''
         },
         target: 7,
+        isWaiting: false
       }
+    },
+    async mounted () {
+      let questions
+      try {
+        questions = await this.$testload()
+      } catch (error) {
+        questions = localStorage.getItem('questionsConfig')
+      }
+      this.questions = JSON.parse(questions)
     },
     methods: {
       deleteHandel (type, index) {
@@ -122,6 +132,7 @@
         this.questions.useless.push({ id: createId, text: '' })
       },
       async submitConfig () {
+        if (this.isWaiting) { return false }
         const leftVerify = this.questions.left.every(item => item.text)
         if (!leftVerify) {
           this.$message({
@@ -186,11 +197,13 @@
 
         let setQuestion = this.questions
         try {
+          this.isWaiting = true
           const thumbnail = await save(setQuestion)
           await this.$testsave(thumbnail, JSON.stringify(setQuestion))
         } catch (error) {
           localStorage.setItem('questionsConfig', JSON.stringify(setQuestion))
         }
+        this.isWaiting = false
         this.$router.replace('/')
 
       },
