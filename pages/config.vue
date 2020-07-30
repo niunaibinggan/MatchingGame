@@ -3,6 +3,7 @@
     <h3 class="root__title-set">
       <input type="text"
              v-model="questions.title"
+             maxlength="10"
              placeholder="请输入标题">
     </h3>
     <div class="root__name">
@@ -24,7 +25,8 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="item.text">
+                   v-model="item.text"
+                   maxlength="15">
           </span>
           <span class="root__line"></span>
           <span class="root__content-right root__content-common">
@@ -33,7 +35,8 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入正确答案"
-                   v-model="questions.right[index].text">
+                   v-model="questions.right[index].text"
+                   maxlength="15">
           </span>
         </p>
       </div>
@@ -50,6 +53,7 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入干扰项"
+                   maxlength="15"
                    v-model="item.text">
           </span>
         </p>
@@ -135,20 +139,36 @@
       },
       async submitConfig () {
         if (this.isWaiting) { return false }
+
         const leftVerify = this.questions.left.every(item => item.text)
+        const leftArr = []
+
+        this.questions.left.map((item, index) => {
+          if (!item.text) {
+            leftArr.push(index + 1)
+          }
+        })
         if (!leftVerify) {
           this.$message({
-            message: '题目不能为空！',
+            message: `第${leftArr.join('、')}题题目不能为空！`,
             type: 'warning'
           })
           return
+
         }
 
         const rightVerify = this.questions.right.every(item => item.text)
 
+        const rightArr = []
+        this.questions.right.map((item, index) => {
+          if (!item.text) {
+            rightArr.push(index + 1)
+          }
+        })
+
         if (!rightVerify) {
           this.$message({
-            message: `答案不能为空！`,
+            message: `第${rightArr.join('、')}题答案不能为空！`,
             type: 'warning'
           })
           return
@@ -156,9 +176,16 @@
 
         const uselessVerify = this.questions.useless.every(item => item.text)
 
+        const uselessArr = []
+        this.questions.useless.map((item, index) => {
+          if (!item.text) {
+            uselessArr.push(index + 1)
+          }
+        })
+
         if (!uselessVerify) {
           this.$message({
-            message: `干扰项不能为空！`,
+            message: `干扰项第${uselessArr.join('、')}不能为空！`,
             type: 'warning'
           })
           return
@@ -185,7 +212,7 @@
 
         if (this.getByte(this.questions.title) >= 18) {
           this.$message({
-            message: `最多输入18个字符`,
+            message: `标题最多输入18个字符`,
             type: 'warning'
           })
           return
