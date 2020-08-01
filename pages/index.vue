@@ -38,10 +38,8 @@
       } catch (error) {
         questions = localStorage.getItem('questionsConfig')
       }
-
-      if (!questions) return this.$router.replace('/config')
-
-      this.questions = JSON.parse(questions)
+      this.questions = JSON.parse(questions||null)
+      if (!this.questions || this.questions.name!=='matchGame') return this.$router.replace('/config')
 
       this.shuffle(this.questions.left.concat(this.questions.useless))
 

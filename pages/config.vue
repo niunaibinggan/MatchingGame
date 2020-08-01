@@ -107,8 +107,9 @@
       } catch (error) {
         questions = localStorage.getItem('questionsConfig')
       }
-      if (questions) {
-        this.questions = JSON.parse(questions)
+      questions = JSON.parse(questions||null)
+      if (questions && questions.name === 'matchGame') {
+        this.questions = questions
       }
     },
     methods: {
@@ -233,6 +234,7 @@
         }
 
         let setQuestion = this.questions
+        setQuestion.name='matchGame'
         try {
           this.isWaiting = true
           const thumbnail = await save(setQuestion)
