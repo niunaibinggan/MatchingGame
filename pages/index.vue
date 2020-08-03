@@ -27,7 +27,8 @@
         resultCanvas: null,
         setAlpha: 1,
         setAnswer: [],
-        timer: null
+        timer: null,
+        isWaiting: false
       }
     },
     async mounted () {
@@ -38,8 +39,8 @@
       } catch (error) {
         questions = localStorage.getItem('questionsConfig')
       }
-      this.questions = JSON.parse(questions||null)
-      if (!this.questions || this.questions.name!=='matchGame') return this.$router.replace('/config')
+      this.questions = JSON.parse(questions || null)
+      if (!this.questions || this.questions.name !== 'matchGame') return this.$router.replace('/config')
 
       this.shuffle(this.questions.left.concat(this.questions.useless))
 
@@ -109,6 +110,8 @@
         })
 
         subBtn.on(Hilo.event.POINTER_START, (e) => {
+          if (this.isWaiting) return false
+          this.isWaiting = true
           clearInterval(this.timer)
 
           setTimeout(() => {
@@ -127,7 +130,7 @@
               // 清除拖拽
               this.questionsPanelCanvas.leftContainer.children.forEach(item => item.stopDrag())
             }
-
+            this.isWaiting = false
           }, 300)
         })
         this.stage.addChild(subBtn)
