@@ -26,7 +26,8 @@
                    class="root__item-input"
                    placeholder="输入正确答案"
                    v-model="item.text"
-                   maxlength="15">
+                   maxlength="15"
+                   @input="focusHandel($event,'left', index)">
           </span>
           <span class="root__line"></span>
           <span class="root__content-right root__content-common">
@@ -36,7 +37,8 @@
                    class="root__item-input"
                    placeholder="输入正确答案"
                    v-model="questions.right[index].text"
-                   maxlength="15">
+                   maxlength="15"
+                   @input="focusHandel($event,'right', index)">
           </span>
         </p>
       </div>
@@ -45,7 +47,6 @@
            :key="item.id">
         <p class="root__content">
           <span class="root__delete"
-                v-if="questions.left.length > 1"
                 @click="deleteHandel('useless',index)">+</span>
           <span class="root__content-left root__content-common root__content-useless">
             <span class="root__item-text"
@@ -54,7 +55,8 @@
                    class="root__item-input"
                    placeholder="输入干扰项"
                    maxlength="15"
-                   v-model="item.text">
+                   v-model="item.text"
+                   @input="focusHandel($event,'useless', index)">
           </span>
         </p>
       </div>
@@ -107,7 +109,7 @@
       } catch (error) {
         questions = localStorage.getItem('questionsConfig')
       }
-      questions = JSON.parse(questions||null)
+      questions = JSON.parse(questions || null)
       if (questions && questions.name === 'matchGame') {
         this.questions = questions
       }
@@ -234,7 +236,7 @@
         }
 
         let setQuestion = this.questions
-        setQuestion.name='matchGame'
+        setQuestion.name = 'matchGame'
         try {
           this.isWaiting = true
           const thumbnail = await save(setQuestion)
@@ -287,6 +289,9 @@
           })
           this.questions[type][index].text = ''
         }
+      },
+      focusHandel (e, type, index) {
+        this.questions[type][index].text = this.questions[type][index].text.trim()
       }
     }
   }
