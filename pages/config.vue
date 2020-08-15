@@ -126,7 +126,7 @@
       addQuestion (type) {
         if (this.questions.left.concat(this.questions.useless).length >= this.target) {
           this.$message({
-            message: `最多添加${this.target}道题目`,
+            message: `题目和干扰项最多添加${this.target}道`,
             type: 'warning'
           })
           return
@@ -194,15 +194,58 @@
           return
         }
 
-        const all = this.questions.useless.concat(this.questions.left, this.questions.right)
+        const uselessMaxArr = []
 
-        if (all.filter(item => this.getByte(item.text) >= 21).length) {
+        this.questions.useless.map((item, index) => {
+          if (this.getByte(item.text) >= 21) {
+            uselessMaxArr.push(index + 1)
+          }
+        })
+        if (uselessMaxArr.length) {
           this.$message({
-            message: `最多输入20个字符`,
+            message: `干扰项第${uselessMaxArr.join('、')}最多输入20个字符！`,
             type: 'warning'
           })
           return
         }
+
+        const leftMaxArr = []
+        this.questions.left.map((item, index) => {
+          if (this.getByte(item.text) >= 21) {
+            leftMaxArr.push(index + 1)
+          }
+        })
+        if (leftMaxArr.length) {
+          this.$message({
+            message: `第${leftMaxArr.join('、')}题左侧最多输入20个字符！`,
+            type: 'warning'
+          })
+          return
+        }
+
+        const rightMaxArr = []
+        this.questions.left.map((item, index) => {
+          if (this.getByte(item.text) >= 21) {
+            rightMaxArr.push(index + 1)
+          }
+        })
+        if (rightMaxArr.length) {
+          this.$message({
+            message: `第${rightMaxArr.join('、')}题右侧最多输入20个字符！`,
+            type: 'warning'
+          })
+          return
+        }
+
+        // const all = this.questions.useless.concat(this.questions.left, this.questions.right)
+
+        // if (all.filter(item => this.getByte(item.text) >= 21).length) {
+        //   this.$message({
+        //     message: `每项最多输入20个字符`,
+        //     type: 'warning'
+        //   })
+        //   return
+        // }
 
 
         if (!this.questions.title) {
