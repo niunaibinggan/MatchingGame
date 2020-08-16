@@ -26,7 +26,7 @@
                    class="root__item-input"
                    placeholder="输入正确答案"
                    v-model="item.text"
-                   maxlength="15"
+                   maxlength="20"
                    @input="focusHandel($event,'left', index)">
           </span>
           <span class="root__line"></span>
@@ -37,7 +37,7 @@
                    class="root__item-input"
                    placeholder="输入正确答案"
                    v-model="questions.right[index].text"
-                   maxlength="15"
+                   maxlength="20"
                    @input="focusHandel($event,'right', index)">
           </span>
         </p>
@@ -54,7 +54,7 @@
             <input type="text"
                    class="root__item-input"
                    placeholder="输入干扰项"
-                   maxlength="15"
+                   maxlength="20"
                    v-model="item.text"
                    @input="focusHandel($event,'useless', index)">
           </span>
@@ -208,7 +208,6 @@
           })
           return
         }
-
         const leftMaxArr = []
         this.questions.left.map((item, index) => {
           if (this.getByte(item.text) >= 21) {
@@ -256,7 +255,7 @@
           return
         }
 
-        if (this.getByte(this.questions.title) >= 18) {
+        if (this.getByte(this.questions.title) > 18) {
           this.$message({
             message: `标题最多输入18个字符!(1个汉字视为2个字符)`,
             type: 'warning'
