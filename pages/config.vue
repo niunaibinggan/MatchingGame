@@ -203,7 +203,7 @@
         })
         if (uselessMaxArr.length) {
           this.$message({
-            message: `干扰项第${uselessMaxArr.join('、')}最多输入20个字符！`,
+            message: `干扰项第${uselessMaxArr.join('、')}最多输入20个字符!(1个汉字视为2个字符)`,
             type: 'warning'
           })
           return
@@ -217,7 +217,7 @@
         })
         if (leftMaxArr.length) {
           this.$message({
-            message: `第${leftMaxArr.join('、')}题左侧最多输入20个字符！`,
+            message: `第${leftMaxArr.join('、')}题左侧最多输入20个字符!(1个汉字视为2个字符)`,
             type: 'warning'
           })
           return
@@ -231,7 +231,7 @@
         })
         if (rightMaxArr.length) {
           this.$message({
-            message: `第${rightMaxArr.join('、')}题右侧最多输入20个字符！`,
+            message: `第${rightMaxArr.join('、')}题右侧最多输入20个字符!(1个汉字视为2个字符)`,
             type: 'warning'
           })
           return
@@ -258,7 +258,7 @@
 
         if (this.getByte(this.questions.title) >= 18) {
           this.$message({
-            message: `标题最多输入18个字符`,
+            message: `标题最多输入18个字符!(1个汉字视为2个字符)`,
             type: 'warning'
           })
           return
