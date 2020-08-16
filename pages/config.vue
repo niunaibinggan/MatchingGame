@@ -223,7 +223,7 @@
         }
 
         const rightMaxArr = []
-        this.questions.left.map((item, index) => {
+        this.questions.right.map((item, index) => {
           if (this.getByte(item.text) >= 21) {
             rightMaxArr.push(index + 1)
           }
