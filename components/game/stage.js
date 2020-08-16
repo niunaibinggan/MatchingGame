@@ -18,6 +18,7 @@ export default function initStage () {
     container: document.createElement('canvas')
   })
   function touchHandler(event) {
+    if( event.touches.length>1 ){ return false }
     var touches = event.changedTouches,
       first = touches[0],
       type = "";
